@@ -22,7 +22,7 @@ define( 'MAPT_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 
 // Plugin URL
 define( 'MAPT_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-
+require_once MAPT_PLUGIN_DIR . 'public/shortcode.php';
 
 /**
  * Plugin activation
