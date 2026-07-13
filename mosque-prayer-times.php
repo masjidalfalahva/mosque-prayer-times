@@ -52,3 +52,22 @@ add_action(
     'plugins_loaded',
     'mapt_loaded_message'
 );
+
+/**
+ * Load plugin styles
+ */
+function mapt_load_styles() {
+
+    wp_enqueue_style(
+        'mapt-prayer-style',
+        MAPT_PLUGIN_URL . 'public/css/prayer-times.css',
+        array(),
+        MAPT_VERSION
+    );
+
+}
+
+add_action(
+    'wp_enqueue_scripts',
+    'mapt_load_styles'
+);
