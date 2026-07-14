@@ -25,11 +25,10 @@ define( 'MAPT_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 require_once MAPT_PLUGIN_DIR . 'public/shortcode.php';
 
 // Load plugin files
-require_once MAPT_PLUGIN_DIR . 'public/shortcode.php';
-
-require_once MAPT_PLUGIN_DIR . 'includes/prayer-loader.php';
-
 require_once MAPT_PLUGIN_DIR . 'includes/database.php';
+require_once MAPT_PLUGIN_DIR . 'includes/prayer-loader.php';
+require_once MAPT_PLUGIN_DIR . 'public/shortcode.php';
+require_once MAPT_PLUGIN_DIR . 'admin/admin-menu.php';
 
 /**
  * Plugin activation
