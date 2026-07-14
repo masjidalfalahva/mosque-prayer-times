@@ -13,59 +13,101 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function mapt_display_prayer_times() {
 
+    $prayers = mapt_get_prayer_times();
+
+    if ( empty( $prayers ) ) {
+
+        return '<p>No prayer schedule available.</p>';
+
+    }
+
+
+    // Get today's date
+    $today = date('Y-m-d');
+
+    $today_schedule = null;
+
+
+    foreach ( $prayers as $schedule ) {
+
+        if ( $schedule['date'] == $today ) {
+
+            $today_schedule = $schedule;
+            break;
+
+        }
+
+    }
+
+
+    // If today's date is not found, use first available record
+    if ( empty( $today_schedule ) ) {
+
+        $today_schedule = $prayers[0];
+
+    }
+
+
     ob_start();
 
-    ?>
+?>
 
-    <div class="mapt-prayer-card">
+<div class="mapt-prayer-card">
 
-        <h2>Masjid Al-Falah Prayer Times</h2>
+<h2>Masjid Al-Falah Prayer Times</h2>
 
-        <table class="mapt-prayer-table">
+<table class="mapt-prayer-table">
 
-            <tr>
-                <th>Prayer</th>
-                <th>Adhan</th>
-                <th>Iqamah</th>
-            </tr>
+<tr>
+<th>Prayer</th>
+<th>Adhan</th>
+<th>Iqamah</th>
+</tr>
 
-            <tr>
-                <td>Fajr</td>
-                <td>5:15 AM</td>
-                <td>5:45 AM</td>
-            </tr>
 
-            <tr>
-                <td>Dhuhr</td>
-                <td>1:15 PM</td>
-                <td>1:30 PM</td>
-            </tr>
+<tr>
+<td>Fajr</td>
+<td><?php echo esc_html($today_schedule['fajr_adhan']); ?></td>
+<td><?php echo esc_html($today_schedule['fajr_iqamah']); ?></td>
+</tr>
 
-            <tr>
-                <td>Asr</td>
-                <td>5:45 PM</td>
-                <td>6:00 PM</td>
-            </tr>
 
-            <tr>
-                <td>Maghrib</td>
-                <td>Sunset</td>
-                <td>10 min after Adhan</td>
-            </tr>
+<tr>
+<td>Dhuhr</td>
+<td><?php echo esc_html($today_schedule['dhuhr_adhan']); ?></td>
+<td><?php echo esc_html($today_schedule['dhuhr_iqamah']); ?></td>
+</tr>
 
-            <tr>
-                <td>Isha</td>
-                <td>8:45 PM</td>
-                <td>9:00 PM</td>
-            </tr>
 
-        </table>
+<tr>
+<td>Asr</td>
+<td><?php echo esc_html($today_schedule['asr_adhan']); ?></td>
+<td><?php echo esc_html($today_schedule['asr_iqamah']); ?></td>
+</tr>
 
-    </div>
 
-    <?php
+<tr>
+<td>Maghrib</td>
+<td><?php echo esc_html($today_schedule['maghrib_adhan']); ?></td>
+<td><?php echo esc_html($today_schedule['maghrib_iqamah']); ?></td>
+</tr>
 
-    return ob_get_clean();
+
+<tr>
+<td>Isha</td>
+<td><?php echo esc_html($today_schedule['isha_adhan']); ?></td>
+<td><?php echo esc_html($today_schedule['isha_iqamah']); ?></td>
+</tr>
+
+
+</table>
+
+</div>
+
+
+<?php
+
+return ob_get_clean();
 
 }
 
