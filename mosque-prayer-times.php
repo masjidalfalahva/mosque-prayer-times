@@ -29,12 +29,14 @@ require_once MAPT_PLUGIN_DIR . 'public/shortcode.php';
 
 require_once MAPT_PLUGIN_DIR . 'includes/prayer-loader.php';
 
+require_once MAPT_PLUGIN_DIR . 'includes/database.php';
+
 /**
  * Plugin activation
  */
 function mapt_activate_plugin() {
 
-    // Future database setup will go here.
+     mapt_create_database();
 
 }
 
