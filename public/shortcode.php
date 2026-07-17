@@ -22,22 +22,29 @@ function mapt_display_prayer_times() {
     }
 
 
-    // Get today's date
-    $today = date('Y-m-d');
+  // Get today's and tomorrow's dates
+$today = current_time('Y-m-d');
 
-    $today_schedule = null;
+$tomorrow = date(
+    'Y-m-d',
+    strtotime('+1 day', strtotime($today))
+);
+
+$today_schedule = null;
+$tomorrow_schedule = null;
 
 
-    foreach ( $prayers as $schedule ) {
+  foreach ( $prayers as $schedule ) {
 
-        if ( $schedule['date'] == $today ) {
-
-            $today_schedule = $schedule;
-            break;
-
-        }
-
+    if ( $schedule['date'] == $today ) {
+        $today_schedule = $schedule;
     }
+
+    if ( $schedule['date'] == $tomorrow ) {
+        $tomorrow_schedule = $schedule;
+    }
+
+}
 
 
     // If today's date is not found, use first available record
@@ -46,6 +53,12 @@ function mapt_display_prayer_times() {
         $today_schedule = $prayers[0];
 
     }
+
+    if ( empty( $tomorrow_schedule ) ) {
+
+    $tomorrow_schedule = $today_schedule;
+
+}
 
 
     ob_start();
