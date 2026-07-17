@@ -70,11 +70,15 @@ $tomorrow_schedule = null;
     <h2>🕌 Masjid Al-Falah Prayer Times</h2>
 
     <p style="text-align:center;font-size:18px;color:#003366;margin-top:-10px;margin-bottom:20px;">
-        <?php echo date_i18n('l, F j, Y'); ?>
-    </p>
+    <?php echo date_i18n('l, F j, Y'); ?>
+</p>
 
-    <h3 style="text-align:center;color:#C8A646;">TODAY</h3>
+<div class="mapt-two-column">
 
+<div class="mapt-column">
+
+<h3 style="text-align:center;color:#C8A646;">TODAY</h3>
+    
     <table class="mapt-prayer-table">
 
         <tr>
@@ -121,9 +125,11 @@ $tomorrow_schedule = null;
 
     </table>
 
-    <hr style="margin:25px 0;">
+</div>
 
-    <h3 style="text-align:center;color:#C8A646;">TOMORROW</h3>
+<div class="mapt-column">
+
+<h3 style="text-align:center;color:#C8A646;">TOMORROW</h3>
 
     <table class="mapt-prayer-table">
 
@@ -171,9 +177,12 @@ $tomorrow_schedule = null;
 
     </table>
 
+    </div>
+
+</div>
+
     <?php if ( date('N', strtotime($today_schedule['date'])) == 5 ) : ?>
 
-        <hr style="margin:25px 0;">
 
         <h3 style="text-align:center;color:#C8A646;">JUMU'AH</h3>
 
