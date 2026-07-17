@@ -57,6 +57,15 @@ function mapt_register_admin_menu() {
 
 	add_submenu_page(
 		'mapt-dashboard',
+		'Jumu\'ah Schedule',
+		'Jumu\'ah Schedule',
+		'manage_options',
+		'mapt-jummah-schedule',
+		'mapt_render_jummah_schedule_page'
+	);
+
+	add_submenu_page(
+		'mapt-dashboard',
 		'Settings',
 		'Settings',
 		'manage_options',
@@ -99,6 +108,32 @@ function mapt_dashboard_page() {
 	<?php
 }
 
+/**
+ * Temporary Jumu'ah Schedule page.
+ *
+ * The full form will be added in the next step.
+ */
+function mapt_render_jummah_schedule_page() {
+	?>
+	<div class="wrap">
+		<h1>Jumu'ah Schedule</h1>
+
+		<p>
+			Use this page to apply Jumu'ah times to every Friday
+			within a selected date range.
+		</p>
+
+		<div
+			class="notice notice-info"
+			style="max-width:700px;"
+		>
+			<p>
+				The Jumu'ah date-range form will be added in the next step.
+			</p>
+		</div>
+	</div>
+	<?php
+}
 
 /**
  * Render the Settings placeholder page.
