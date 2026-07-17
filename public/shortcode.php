@@ -126,6 +126,58 @@ $tomorrow_schedule = null;
 
 </div>
 
+<div class="mapt-prayer-card">
+
+<h2>Tomorrow's Prayer Times</h2>
+
+<table class="mapt-prayer-table">
+
+<tr>
+    <th>Prayer</th>
+    <th>Adhan</th>
+    <th>Iqamah</th>
+</tr>
+
+<tr>
+    <td>Fajr</td>
+    <td><?php echo esc_html($tomorrow_schedule['fajr_adhan']); ?></td>
+    <td><?php echo esc_html($tomorrow_schedule['fajr_iqamah']); ?></td>
+</tr>
+
+<tr>
+    <td>Sunrise</td>
+    <td><?php echo esc_html($tomorrow_schedule['sunrise']); ?></td>
+    <td>—</td>
+</tr>
+
+<tr>
+    <td>Dhuhr</td>
+    <td><?php echo esc_html($tomorrow_schedule['dhuhr_adhan']); ?></td>
+    <td><?php echo esc_html($tomorrow_schedule['dhuhr_iqamah']); ?></td>
+</tr>
+
+<tr>
+    <td>Asr</td>
+    <td><?php echo esc_html($tomorrow_schedule['asr_adhan']); ?></td>
+    <td><?php echo esc_html($tomorrow_schedule['asr_iqamah']); ?></td>
+</tr>
+
+<tr>
+    <td>Maghrib</td>
+    <td><?php echo esc_html($tomorrow_schedule['maghrib_adhan']); ?></td>
+    <td><?php echo esc_html($tomorrow_schedule['maghrib_iqamah']); ?></td>
+</tr>
+
+<tr>
+    <td>Isha</td>
+    <td><?php echo esc_html($tomorrow_schedule['isha_adhan']); ?></td>
+    <td><?php echo esc_html($tomorrow_schedule['isha_iqamah']); ?></td>
+</tr>
+
+</table>
+
+</div>
+
 
 <?php
 
