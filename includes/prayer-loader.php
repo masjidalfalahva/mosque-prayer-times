@@ -10,30 +10,23 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function mapt_get_prayer_times() {
 
-    $file = MAPT_PLUGIN_DIR . 'data/prayer-schedule.csv';
+    global $wpdb;
 
-    if ( ! file_exists( $file ) ) {
+    $table_name = $wpdb->prefix . 'masjid_prayer_times';
+
+    $results = $wpdb->get_results(
+        "SELECT * FROM {$table_name} ORDER BY prayer_date ASC",
+        ARRAY_A
+    );
+
+    if (empty($results)) {
         return array();
     }
 
-    $rows = array();
-
-    if (($handle = fopen($file, "r")) !== FALSE) {
-
-        $headers = fgetcsv($handle);
-
-        while (($data = fgetcsv($handle)) !== FALSE) {
-
-            $rows[] = array_combine(
-                $headers,
-                $data
-            );
-
-        }
-
-        fclose($handle);
+    foreach ($results as &$row) {
+        // Keep compatibility with the existing shortcode
+        $row['date'] = $row['prayer_date'];
     }
 
-    return $rows;
-
+    return $results;
 }
