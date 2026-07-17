@@ -39,3 +39,33 @@
 .mapt-prayer-table tr:hover {
     background: #fff3c4;
 }
+
+/* Two-column layout */
+
+.mapt-two-column {
+    display: flex;
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.mapt-column {
+    flex: 1;
+}
+
+.mapt-column h3 {
+    text-align: center;
+    color: #C8A646;
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+
+    .mapt-two-column {
+        display: block;
+    }
+
+    .mapt-column {
+        margin-bottom: 30px;
+    }
+
+}
