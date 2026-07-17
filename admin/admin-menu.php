@@ -39,6 +39,15 @@ function mapt_register_admin_menu() {
 
 	add_submenu_page(
 		'mapt-dashboard',
+		'Manage Prayer Times',
+		'Manage Prayer Times',
+		'manage_options',
+		'mapt-manage-prayers',
+		'mapt_render_manage_prayers_page'
+	);
+
+	add_submenu_page(
+		'mapt-dashboard',
 		'Import Schedule',
 		'Import Schedule',
 		'manage_options',
@@ -58,6 +67,9 @@ function mapt_register_admin_menu() {
 
 add_action( 'admin_menu', 'mapt_register_admin_menu' );
 
+/**
+ * Render the dashboard page.
+ */
 function mapt_dashboard_page() {
 	?>
 	<div class="wrap">
@@ -72,10 +84,12 @@ function mapt_dashboard_page() {
 				<td><strong>Version</strong></td>
 				<td><?php echo esc_html( MAPT_VERSION ); ?></td>
 			</tr>
+
 			<tr>
 				<td><strong>Shortcode</strong></td>
 				<td><code>[masjid_prayer_times]</code></td>
 			</tr>
+
 			<tr>
 				<td><strong>Status</strong></td>
 				<td>✅ Active</td>
@@ -85,11 +99,16 @@ function mapt_dashboard_page() {
 	<?php
 }
 
-
+/**
+ * Render the Import Schedule placeholder page.
+ */
 function mapt_import_page() {
 	echo '<div class="wrap"><h1>Import Schedule</h1><p>Coming next...</p></div>';
 }
 
+/**
+ * Render the Settings placeholder page.
+ */
 function mapt_settings_page() {
 	echo '<div class="wrap"><h1>Settings</h1><p>Coming soon...</p></div>';
 }
