@@ -10,16 +10,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 function mapt_import_page() {
 
 	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_die( esc_html__( 'You do not have permission to access this page.', 'masjid-prayer-times' ) );
+		wp_die(
+			esc_html__(
+				'You do not have permission to access this page.',
+				'masjid-prayer-times'
+			)
+		);
 	}
 
 	$message = '';
 	$error   = '';
 
-	/*
-	 * Upload processing will be added in Step 2.
-	 * For now, this confirms that the form and selected file work.
-	 */
 	if ( isset( $_POST['mapt_import_submit'] ) ) {
 
 		check_admin_referer(
@@ -31,13 +32,19 @@ function mapt_import_page() {
 			empty( $_FILES['mapt_schedule_file'] ) ||
 			empty( $_FILES['mapt_schedule_file']['name'] )
 		) {
+
 			$error = 'Please choose a Word document before clicking Import Schedule.';
+
 		} else {
 
 			$file = $_FILES['mapt_schedule_file'];
 
 			if ( ! empty( $file['error'] ) ) {
-				$error = 'The file could not be uploaded. Upload error code: ' . intval( $file['error'] );
+
+				$error =
+					'The file could not be uploaded. Upload error code: ' .
+					intval( $file['error'] );
+
 			} else {
 
 				$extension = strtolower(
@@ -48,54 +55,89 @@ function mapt_import_page() {
 				);
 
 				if ( 'docx' !== $extension ) {
+
 					$error = 'Please upload a .docx Word document.';
+
 				} else {
 
-	require_once MAPT_PLUGIN_DIR . 'includes/docx-importer.php';
+					require_once MAPT_PLUGIN_DIR . 'includes/docx-importer.php';
 
-	$rows = mapt_read_docx_table_rows( $file['tmp_name'] );
+					$rows = mapt_read_docx_table_rows(
+						$file['tmp_name']
+					);
 
-	if ( is_wp_error( $rows ) ) {
+					if ( is_wp_error( $rows ) ) {
 
-		$error = $rows->get_error_message();
+						$error = $rows->get_error_message();
 
-	} else {
+					} else {
 
-		$records = mapt_parse_prayer_rows( $rows );
+						$records = mapt_parse_prayer_rows( $rows );
 
-if ( 365 !== count( $records ) ) {
+						if ( 365 !== count( $records ) ) {
 
-	$error = sprintf(
-		'The document contained %d table rows, but only %d daily prayer records were recognized. Nothing was saved.',
-		count( $rows ),
-		count( $records )
-	);
+							$error = sprintf(
+								'The document contained %d table rows, but only %d daily prayer records were recognized. Nothing was saved.',
+								count( $rows ),
+								count( $records )
+							);
 
-} else {
+						} else {
 
-	$import_results = mapt_save_prayer_records( $records );
+							$import_results =
+								mapt_save_prayer_records( $records );
 
-	if ( $import_results['errors'] > 0 ) {
+							if ( $import_results['errors'] > 0 ) {
 
-		$error = sprintf(
-			'The document was read, but the database import had problems. Added: %d. Updated: %d. Errors: %d.',
-			$import_results['added'],
-			$import_results['updated'],
-			$import_results['errors']
-		);
+								$error = sprintf(
+									'The document was read, but the daily prayer import had problems. Added: %d. Updated: %d. Errors: %d.',
+									$import_results['added'],
+									$import_results['updated'],
+									$import_results['errors']
+								);
 
-	} else {
+							} else {
 
-		$message = sprintf(
-			'Import complete! 365 prayer records were recognized. Added: %d. Updated: %d. Errors: 0.',
-			$import_results['added'],
-			$import_results['updated']
-		);
-	}
-}
+								$jummah_schedules =
+									mapt_parse_jummah_schedules( $rows );
 
-	}
-}
+								$jummah_results =
+									mapt_save_jummah_schedules(
+										$jummah_schedules
+									);
+
+								if ( $jummah_results['errors'] > 0 ) {
+
+									$error = sprintf(
+										'Daily prayer times were imported, but the Jumu\'ah update had problems. Daily records added: %d. Daily records updated: %d. Jumu\'ah schedules recognized: %d. Fridays updated: %d. Jumu\'ah errors: %d.',
+										$import_results['added'],
+										$import_results['updated'],
+										$jummah_results['schedules'],
+										$jummah_results['fridays_updated'],
+										$jummah_results['errors']
+									);
+
+								} elseif (
+									empty( $jummah_schedules )
+								) {
+
+									$error =
+										'Daily prayer times were imported successfully, but no Jumu\'ah schedules were recognized in the document.';
+
+								} else {
+
+									$message = sprintf(
+										'Import complete! 365 prayer records were recognized. Added: %d. Updated: %d. Jumu\'ah schedules recognized: %d. Fridays updated: %d. Errors: 0.',
+										$import_results['added'],
+										$import_results['updated'],
+										$jummah_results['schedules'],
+										$jummah_results['fridays_updated']
+									);
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	}
