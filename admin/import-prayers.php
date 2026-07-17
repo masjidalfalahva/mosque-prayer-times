@@ -63,11 +63,36 @@ function mapt_import_page() {
 
 		$records = mapt_parse_prayer_rows( $rows );
 
-$message = sprintf(
-	'Success! %d table rows were found and %d daily prayer records were recognized.',
-	count( $rows ),
-	count( $records )
-);
+if ( 365 !== count( $records ) ) {
+
+	$error = sprintf(
+		'The document contained %d table rows, but only %d daily prayer records were recognized. Nothing was saved.',
+		count( $rows ),
+		count( $records )
+	);
+
+} else {
+
+	$import_results = mapt_save_prayer_records( $records );
+
+	if ( $import_results['errors'] > 0 ) {
+
+		$error = sprintf(
+			'The document was read, but the database import had problems. Added: %d. Updated: %d. Errors: %d.',
+			$import_results['added'],
+			$import_results['updated'],
+			$import_results['errors']
+		);
+
+	} else {
+
+		$message = sprintf(
+			'Import complete! 365 prayer records were recognized. Added: %d. Updated: %d. Errors: 0.',
+			$import_results['added'],
+			$import_results['updated']
+		);
+	}
+}
 
 	}
 }
