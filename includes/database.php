@@ -40,6 +40,10 @@ function mapt_create_database() {
         isha_adhan varchar(20),
         isha_iqamah varchar(20),
 
+        jummah1 varchar(20),
+        jummah2 varchar(20),
+        jummah3 varchar(20),
+
         ramadan tinyint(1) DEFAULT 0,
 
         PRIMARY KEY (id),
