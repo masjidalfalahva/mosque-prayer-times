@@ -61,10 +61,13 @@ function mapt_import_page() {
 
 	} else {
 
-		$message = sprintf(
-			'Success! %d table rows were found in the Word document.',
-			count( $rows )
-		);
+		$records = mapt_parse_prayer_rows( $rows );
+
+$message = sprintf(
+	'Success! %d table rows were found and %d daily prayer records were recognized.',
+	count( $rows ),
+	count( $records )
+);
 
 	}
 }
