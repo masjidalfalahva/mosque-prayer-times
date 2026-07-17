@@ -18,6 +18,8 @@ function mapt_create_database() {
     $sql = "CREATE TABLE $table_name (
 
         id mediumint(9) NOT NULL AUTO_INCREMENT,
+        created_at datetime DEFAULT CURRENT_TIMESTAMP,
+        updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
         prayer_date date NOT NULL,
 
