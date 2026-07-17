@@ -1,0 +1,151 @@
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Render the Import Schedule admin page.
+ */
+function mapt_import_page() {
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( esc_html__( 'You do not have permission to access this page.', 'masjid-prayer-times' ) );
+	}
+
+	$message = '';
+	$error   = '';
+
+	/*
+	 * Upload processing will be added in Step 2.
+	 * For now, this confirms that the form and selected file work.
+	 */
+	if ( isset( $_POST['mapt_import_submit'] ) ) {
+
+		check_admin_referer(
+			'mapt_import_schedule_action',
+			'mapt_import_schedule_nonce'
+		);
+
+		if (
+			empty( $_FILES['mapt_schedule_file'] ) ||
+			empty( $_FILES['mapt_schedule_file']['name'] )
+		) {
+			$error = 'Please choose a Word document before clicking Import Schedule.';
+		} else {
+
+			$file = $_FILES['mapt_schedule_file'];
+
+			if ( ! empty( $file['error'] ) ) {
+				$error = 'The file could not be uploaded. Upload error code: ' . intval( $file['error'] );
+			} else {
+
+				$extension = strtolower(
+					pathinfo(
+						sanitize_file_name( $file['name'] ),
+						PATHINFO_EXTENSION
+					)
+				);
+
+				if ( 'docx' !== $extension ) {
+					$error = 'Please upload a .docx Word document.';
+				} else {
+					$message = 'The Word document was received successfully. The table-reading code will be added in Step 2.';
+				}
+			}
+		}
+	}
+
+	?>
+
+	<div class="wrap">
+
+		<h1>Import Prayer Schedule</h1>
+
+		<p>
+			Upload the annual Masjid Al-Falah prayer schedule in
+			<strong>.docx</strong> format.
+		</p>
+
+		<?php if ( ! empty( $message ) ) : ?>
+
+			<div class="notice notice-success is-dismissible">
+				<p><?php echo esc_html( $message ); ?></p>
+			</div>
+
+		<?php endif; ?>
+
+		<?php if ( ! empty( $error ) ) : ?>
+
+			<div class="notice notice-error">
+				<p><?php echo esc_html( $error ); ?></p>
+			</div>
+
+		<?php endif; ?>
+
+		<div
+			class="card"
+			style="max-width:700px;padding:24px;margin-top:20px;"
+		>
+
+			<h2>Upload Word Schedule</h2>
+
+			<p>
+				Choose your yearly prayer schedule, such as
+				<code>2026 Prayer Schedule.docx</code>.
+			</p>
+
+			<form
+				method="post"
+				enctype="multipart/form-data"
+			>
+
+				<?php
+				wp_nonce_field(
+					'mapt_import_schedule_action',
+					'mapt_import_schedule_nonce'
+				);
+				?>
+
+				<table class="form-table">
+
+					<tr>
+						<th scope="row">
+							<label for="mapt_schedule_file">
+								Word document
+							</label>
+						</th>
+
+						<td>
+							<input
+								type="file"
+								id="mapt_schedule_file"
+								name="mapt_schedule_file"
+								accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+								required
+							>
+
+							<p class="description">
+								Accepted format: .docx
+							</p>
+						</td>
+					</tr>
+
+				</table>
+
+				<?php
+				submit_button(
+					'Import Schedule',
+					'primary',
+					'mapt_import_submit'
+				);
+				?>
+
+			</form>
+
+		</div>
+
+	</div>
+
+	<?php
+}
