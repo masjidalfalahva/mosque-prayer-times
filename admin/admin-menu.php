@@ -1,39 +1,98 @@
 <?php
 
 if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+	exit;
 }
 
 /**
- * Add Prayer Times admin menu.
+ * Register the Prayer Times admin menu.
  */
-function mapt_admin_menu() {
+function mapt_register_admin_menu() {
 
-    add_menu_page(
-        'Prayer Times',
-        'Prayer Times',
-        'manage_options',
-        'mapt-prayer-times',
-        'mapt_dashboard_page',
-        'dashicons-calendar-alt',
-        25
-    );
+	add_menu_page(
+		'Prayer Times',
+		'Prayer Times',
+		'manage_options',
+		'mapt-dashboard',
+		'mapt_dashboard_page',
+		'dashicons-calendar-alt',
+		25
+	);
 
+	add_submenu_page(
+		'mapt-dashboard',
+		'Dashboard',
+		'Dashboard',
+		'manage_options',
+		'mapt-dashboard',
+		'mapt_dashboard_page'
+	);
+
+	add_submenu_page(
+		'mapt-dashboard',
+		'Add Prayer Times',
+		'Add Prayer Times',
+		'manage_options',
+		'mapt-add-prayer',
+		'mapt_add_prayer_page'
+	);
+
+	add_submenu_page(
+		'mapt-dashboard',
+		'Import Schedule',
+		'Import Schedule',
+		'manage_options',
+		'mapt-import',
+		'mapt_import_page'
+	);
+
+	add_submenu_page(
+		'mapt-dashboard',
+		'Settings',
+		'Settings',
+		'manage_options',
+		'mapt-settings',
+		'mapt_settings_page'
+	);
 }
 
-add_action( 'admin_menu', 'mapt_admin_menu' );
+add_action( 'admin_menu', 'mapt_register_admin_menu' );
 
-/**
- * Dashboard page.
- */
 function mapt_dashboard_page() {
-    ?>
-    <div class="wrap">
-        <h1>Masjid Al-Falah Prayer Times</h1>
+	?>
+	<div class="wrap">
+		<h1>🕌 Masjid Al-Falah Prayer Times</h1>
 
-        <p>Welcome to the Prayer Times plugin.</p>
+		<p>Welcome to the Prayer Times plugin.</p>
 
-        <p>The prayer management tools will appear here.</p>
-    </div>
-    <?php
+		<h2>Plugin Status</h2>
+
+		<table class="widefat striped">
+			<tr>
+				<td><strong>Version</strong></td>
+				<td><?php echo esc_html( MAPT_VERSION ); ?></td>
+			</tr>
+			<tr>
+				<td><strong>Shortcode</strong></td>
+				<td><code>[masjid_prayer_times]</code></td>
+			</tr>
+			<tr>
+				<td><strong>Status</strong></td>
+				<td>✅ Active</td>
+			</tr>
+		</table>
+	</div>
+	<?php
+}
+
+function mapt_add_prayer_page() {
+	echo '<div class="wrap"><h1>Add Prayer Times</h1><p>Coming next...</p></div>';
+}
+
+function mapt_import_page() {
+	echo '<div class="wrap"><h1>Import Schedule</h1><p>Coming next...</p></div>';
+}
+
+function mapt_settings_page() {
+	echo '<div class="wrap"><h1>Settings</h1><p>Coming soon...</p></div>';
 }
