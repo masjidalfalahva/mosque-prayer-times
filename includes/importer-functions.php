@@ -17,23 +17,6 @@ function mapt_parse_prayer_rows( $rows ) {
 
 	foreach ( $rows as $row ) {
 
-		/*
-		 * The Masjid Al-Falah document contains 13 columns:
-		 *
-		 * 0  Weekday
-		 * 1  Islamic month and day
-		 * 2  Gregorian day and month
-		 * 3  Fajr Adhan
-		 * 4  Fajr Iqamah
-		 * 5  Sunrise
-		 * 6  Dhuhr Adhan
-		 * 7  Dhuhr Iqamah
-		 * 8  Asr Adhan
-		 * 9  Asr Iqamah
-		 * 10 Maghrib Adhan
-		 * 11 Isha Adhan
-		 * 12 Isha Iqamah
-		 */
 		if ( count( $row ) < 13 ) {
 			continue;
 		}
@@ -44,16 +27,10 @@ function mapt_parse_prayer_rows( $rows ) {
 			trim( $row[0] )
 		);
 
-		/*
-		 * Skip headings and non-prayer rows.
-		 */
 		if ( ! preg_match( '/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)$/i', $weekday ) ) {
 			continue;
 		}
 
-		/*
-		 * Word sometimes inserts spaces between individual letters.
-		 */
 		$islamic_text = strtoupper(
 			preg_replace(
 				'/\s+/',
@@ -68,28 +45,12 @@ function mapt_parse_prayer_rows( $rows ) {
 			trim( $row[2] )
 		);
 
-		/*
-		 * Extract the Islamic month abbreviation.
-		 *
-		 * Examples:
-		 * RJB12
-		 * RMD1
-		 * SHW13
-		 */
 		if ( preg_match( '/^([A-Z]+)\d+$/', $islamic_text, $islamic_matches ) ) {
 			$islamic_month = $islamic_matches[1];
 		} else {
 			$islamic_month = '';
 		}
 
-		/*
-		 * Extract Gregorian date.
-		 *
-		 * Examples:
-		 * 1Jan
-		 * 18Feb
-		 * 31Mar
-		 */
 		if ( ! preg_match( '/^(\d{1,2})([A-Za-z]{3})$/', $date_text, $date_matches ) ) {
 			continue;
 		}
@@ -139,9 +100,6 @@ function mapt_parse_prayer_rows( $rows ) {
 		$isha_adhan    = mapt_normalize_prayer_time( $row[11] );
 		$isha_iqamah   = mapt_normalize_prayer_time( $row[12] );
 
-		/*
-		 * Skip any row that does not contain all expected prayer times.
-		 */
 		if (
 			empty( $fajr_adhan ) ||
 			empty( $fajr_iqamah ) ||
@@ -167,26 +125,12 @@ function mapt_parse_prayer_rows( $rows ) {
 			'asr_adhan'      => $asr_adhan,
 			'asr_iqamah'     => $asr_iqamah,
 			'maghrib_adhan'  => $maghrib_adhan,
-
-			/*
-			 * The schedule states that Maghrib jama'ah is directly
-			 * after the Adhan, so both fields use the same value.
-			 */
 			'maghrib_iqamah' => $maghrib_adhan,
-
 			'isha_adhan'     => $isha_adhan,
 			'isha_iqamah'    => $isha_iqamah,
-
-			/*
-			 * Jumu'ah values will be populated in a later step.
-			 */
 			'jummah1'        => '',
 			'jummah2'        => '',
 			'jummah3'        => '',
-
-			/*
-			 * Rows with the Islamic month code RMD are Ramadan rows.
-			 */
 			'ramadan'        => ( 'RMD' === $islamic_month ) ? 1 : 0,
 		);
 	}
@@ -197,12 +141,6 @@ function mapt_parse_prayer_rows( $rows ) {
 /**
  * Normalize a prayer time.
  *
- * Examples:
- * 5:5 3 a  becomes 5:53 AM
- * 12:18p   becomes 12:18 PM
- * 12:00n   becomes 12:00 PM
- * 6:15     becomes 6:15
- *
  * @param string $time Raw Word-table value.
  *
  * @return string
@@ -211,30 +149,18 @@ function mapt_normalize_prayer_time( $time ) {
 
 	$time = strtolower( trim( $time ) );
 
-	/*
-	 * Remove spaces Word placed between characters.
-	 */
 	$time = preg_replace( '/\s+/', '', $time );
 
 	if ( empty( $time ) ) {
 		return '';
 	}
 
-	/*
-	 * Some cells can contain an accidental trailing character
-	 * introduced by the Word document.
-	 *
-	 * Example: 1:45Z
-	 */
 	$time = preg_replace(
 		'/^(\d{1,2}:\d{2})[^apn\d]$/',
 		'$1',
 		$time
 	);
 
-	/*
-	 * Time with AM or PM abbreviation.
-	 */
 	if ( preg_match( '/^(\d{1,2}):(\d{2})(a|p)$/', $time, $matches ) ) {
 
 		$suffix = ( 'a' === $matches[3] ) ? 'AM' : 'PM';
@@ -242,19 +168,126 @@ function mapt_normalize_prayer_time( $time ) {
 		return intval( $matches[1] ) . ':' . $matches[2] . ' ' . $suffix;
 	}
 
-	/*
-	 * The letter "n" means noon in the document.
-	 */
 	if ( preg_match( '/^(\d{1,2}):(\d{2})n$/', $time, $matches ) ) {
 		return intval( $matches[1] ) . ':' . $matches[2] . ' PM';
 	}
 
-	/*
-	 * Iqamah times often have no AM or PM suffix.
-	 */
 	if ( preg_match( '/^(\d{1,2}):(\d{2})$/', $time, $matches ) ) {
 		return intval( $matches[1] ) . ':' . $matches[2];
 	}
 
 	return '';
+}
+
+/**
+ * Insert or update parsed prayer records in the database.
+ *
+ * @param array $records Parsed prayer records.
+ *
+ * @return array
+ */
+function mapt_save_prayer_records( $records ) {
+
+	global $wpdb;
+
+	$table_name = $wpdb->prefix . 'masjid_prayer_times';
+
+	$results = array(
+		'added'   => 0,
+		'updated' => 0,
+		'errors'  => 0,
+	);
+
+	if ( empty( $records ) || ! is_array( $records ) ) {
+		return $results;
+	}
+
+	foreach ( $records as $record ) {
+
+		if ( empty( $record['prayer_date'] ) ) {
+			$results['errors']++;
+			continue;
+		}
+
+		$prayer_date = sanitize_text_field( $record['prayer_date'] );
+
+		$data = array(
+			'prayer_date'    => $prayer_date,
+			'fajr_adhan'     => sanitize_text_field( $record['fajr_adhan'] ),
+			'fajr_iqamah'    => sanitize_text_field( $record['fajr_iqamah'] ),
+			'sunrise'        => sanitize_text_field( $record['sunrise'] ),
+			'dhuhr_adhan'    => sanitize_text_field( $record['dhuhr_adhan'] ),
+			'dhuhr_iqamah'   => sanitize_text_field( $record['dhuhr_iqamah'] ),
+			'asr_adhan'      => sanitize_text_field( $record['asr_adhan'] ),
+			'asr_iqamah'     => sanitize_text_field( $record['asr_iqamah'] ),
+			'maghrib_adhan'  => sanitize_text_field( $record['maghrib_adhan'] ),
+			'maghrib_iqamah' => sanitize_text_field( $record['maghrib_iqamah'] ),
+			'isha_adhan'     => sanitize_text_field( $record['isha_adhan'] ),
+			'isha_iqamah'    => sanitize_text_field( $record['isha_iqamah'] ),
+			'ramadan'        => ! empty( $record['ramadan'] ) ? 1 : 0,
+		);
+
+		$formats = array(
+			'%s',
+			'%s',
+			'%s',
+			'%s',
+			'%s',
+			'%s',
+			'%s',
+			'%s',
+			'%s',
+			'%s',
+			'%s',
+			'%s',
+			'%d',
+		);
+
+		$existing_id = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT id
+				FROM {$table_name}
+				WHERE prayer_date = %s
+				LIMIT 1",
+				$prayer_date
+			)
+		);
+
+		if ( $existing_id ) {
+
+			$update_result = $wpdb->update(
+				$table_name,
+				$data,
+				array(
+					'id' => intval( $existing_id ),
+				),
+				$formats,
+				array(
+					'%d',
+				)
+			);
+
+			if ( false === $update_result ) {
+				$results['errors']++;
+			} else {
+				$results['updated']++;
+			}
+
+		} else {
+
+			$insert_result = $wpdb->insert(
+				$table_name,
+				$data,
+				$formats
+			);
+
+			if ( false === $insert_result ) {
+				$results['errors']++;
+			} else {
+				$results['added']++;
+			}
+		}
+	}
+
+	return $results;
 }
