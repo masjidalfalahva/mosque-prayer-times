@@ -34,7 +34,7 @@ function mapt_register_admin_menu() {
 		'Add Prayer Times',
 		'manage_options',
 		'mapt-add-prayer',
-		'mapt_add_prayer_page'
+		'mapt_render_add_prayer_page'
 	);
 
 	add_submenu_page(
