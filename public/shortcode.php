@@ -67,114 +67,131 @@ $tomorrow_schedule = null;
 
 <div class="mapt-prayer-card">
 
-<h2>Masjid Al-Falah Prayer Times</h2>
+    <h2>🕌 Masjid Al-Falah Prayer Times</h2>
 
-<p style="text-align:center; font-size:18px; color:#003366; margin-top:-10px; margin-bottom:20px;">
-    <?php echo date_i18n('l, F j, Y'); ?>
-</p>
-    
-<table class="mapt-prayer-table">
+    <p style="text-align:center;font-size:18px;color:#003366;margin-top:-10px;margin-bottom:20px;">
+        <?php echo date_i18n('l, F j, Y'); ?>
+    </p>
 
-<tr>
-<th>Prayer</th>
-<th>Adhan</th>
-<th>Iqamah</th>
-</tr>
+    <h3 style="text-align:center;color:#C8A646;">TODAY</h3>
 
+    <table class="mapt-prayer-table">
 
-<tr>
-    <td>Fajr</td>
-    <td><?php echo esc_html($today_schedule['fajr_adhan']); ?></td>
-    <td><?php echo esc_html($today_schedule['fajr_iqamah']); ?></td>
-</tr>
+        <tr>
+            <th>Prayer</th>
+            <th>Adhan</th>
+            <th>Iqamah</th>
+        </tr>
 
-<tr>
-    <td>Sunrise</td>
-    <td><?php echo esc_html($today_schedule['sunrise']); ?></td>
-    <td>—</td>
-</tr>
+        <tr>
+            <td>Fajr</td>
+            <td><?php echo esc_html($today_schedule['fajr_adhan']); ?></td>
+            <td><?php echo esc_html($today_schedule['fajr_iqamah']); ?></td>
+        </tr>
 
-<tr>
-    <td>Dhuhr</td>
-    <td><?php echo esc_html($today_schedule['dhuhr_adhan']); ?></td>
-    <td><?php echo esc_html($today_schedule['dhuhr_iqamah']); ?></td>
-</tr>
+        <tr>
+            <td>Sunrise</td>
+            <td><?php echo esc_html($today_schedule['sunrise']); ?></td>
+            <td>—</td>
+        </tr>
 
+        <tr>
+            <td>Dhuhr</td>
+            <td><?php echo esc_html($today_schedule['dhuhr_adhan']); ?></td>
+            <td><?php echo esc_html($today_schedule['dhuhr_iqamah']); ?></td>
+        </tr>
 
-<tr>
-<td>Asr</td>
-<td><?php echo esc_html($today_schedule['asr_adhan']); ?></td>
-<td><?php echo esc_html($today_schedule['asr_iqamah']); ?></td>
-</tr>
+        <tr>
+            <td>Asr</td>
+            <td><?php echo esc_html($today_schedule['asr_adhan']); ?></td>
+            <td><?php echo esc_html($today_schedule['asr_iqamah']); ?></td>
+        </tr>
 
+        <tr>
+            <td>Maghrib</td>
+            <td><?php echo esc_html($today_schedule['maghrib_adhan']); ?></td>
+            <td><?php echo esc_html($today_schedule['maghrib_iqamah']); ?></td>
+        </tr>
 
-<tr>
-<td>Maghrib</td>
-<td><?php echo esc_html($today_schedule['maghrib_adhan']); ?></td>
-<td><?php echo esc_html($today_schedule['maghrib_iqamah']); ?></td>
-</tr>
+        <tr>
+            <td>Isha</td>
+            <td><?php echo esc_html($today_schedule['isha_adhan']); ?></td>
+            <td><?php echo esc_html($today_schedule['isha_iqamah']); ?></td>
+        </tr>
 
+    </table>
 
-<tr>
-<td>Isha</td>
-<td><?php echo esc_html($today_schedule['isha_adhan']); ?></td>
-<td><?php echo esc_html($today_schedule['isha_iqamah']); ?></td>
-</tr>
+    <hr style="margin:25px 0;">
 
+    <h3 style="text-align:center;color:#C8A646;">TOMORROW</h3>
 
-</table>
+    <table class="mapt-prayer-table">
 
-</div>
+        <tr>
+            <th>Prayer</th>
+            <th>Adhan</th>
+            <th>Iqamah</th>
+        </tr>
 
-<div class="mapt-prayer-card">
+        <tr>
+            <td>Fajr</td>
+            <td><?php echo esc_html($tomorrow_schedule['fajr_adhan']); ?></td>
+            <td><?php echo esc_html($tomorrow_schedule['fajr_iqamah']); ?></td>
+        </tr>
 
-<h2>Tomorrow's Prayer Times</h2>
+        <tr>
+            <td>Sunrise</td>
+            <td><?php echo esc_html($tomorrow_schedule['sunrise']); ?></td>
+            <td>—</td>
+        </tr>
 
-<table class="mapt-prayer-table">
+        <tr>
+            <td>Dhuhr</td>
+            <td><?php echo esc_html($tomorrow_schedule['dhuhr_adhan']); ?></td>
+            <td><?php echo esc_html($tomorrow_schedule['dhuhr_iqamah']); ?></td>
+        </tr>
 
-<tr>
-    <th>Prayer</th>
-    <th>Adhan</th>
-    <th>Iqamah</th>
-</tr>
+        <tr>
+            <td>Asr</td>
+            <td><?php echo esc_html($tomorrow_schedule['asr_adhan']); ?></td>
+            <td><?php echo esc_html($tomorrow_schedule['asr_iqamah']); ?></td>
+        </tr>
 
-<tr>
-    <td>Fajr</td>
-    <td><?php echo esc_html($tomorrow_schedule['fajr_adhan']); ?></td>
-    <td><?php echo esc_html($tomorrow_schedule['fajr_iqamah']); ?></td>
-</tr>
+        <tr>
+            <td>Maghrib</td>
+            <td><?php echo esc_html($tomorrow_schedule['maghrib_adhan']); ?></td>
+            <td><?php echo esc_html($tomorrow_schedule['maghrib_iqamah']); ?></td>
+        </tr>
 
-<tr>
-    <td>Sunrise</td>
-    <td><?php echo esc_html($tomorrow_schedule['sunrise']); ?></td>
-    <td>—</td>
-</tr>
+        <tr>
+            <td>Isha</td>
+            <td><?php echo esc_html($tomorrow_schedule['isha_adhan']); ?></td>
+            <td><?php echo esc_html($tomorrow_schedule['isha_iqamah']); ?></td>
+        </tr>
 
-<tr>
-    <td>Dhuhr</td>
-    <td><?php echo esc_html($tomorrow_schedule['dhuhr_adhan']); ?></td>
-    <td><?php echo esc_html($tomorrow_schedule['dhuhr_iqamah']); ?></td>
-</tr>
+    </table>
 
-<tr>
-    <td>Asr</td>
-    <td><?php echo esc_html($tomorrow_schedule['asr_adhan']); ?></td>
-    <td><?php echo esc_html($tomorrow_schedule['asr_iqamah']); ?></td>
-</tr>
+    <?php if ( date('N', strtotime($today_schedule['date'])) == 5 ) : ?>
 
-<tr>
-    <td>Maghrib</td>
-    <td><?php echo esc_html($tomorrow_schedule['maghrib_adhan']); ?></td>
-    <td><?php echo esc_html($tomorrow_schedule['maghrib_iqamah']); ?></td>
-</tr>
+        <hr style="margin:25px 0;">
 
-<tr>
-    <td>Isha</td>
-    <td><?php echo esc_html($tomorrow_schedule['isha_adhan']); ?></td>
-    <td><?php echo esc_html($tomorrow_schedule['isha_iqamah']); ?></td>
-</tr>
+        <h3 style="text-align:center;color:#C8A646;">JUMU'AH</h3>
 
-</table>
+        <p style="text-align:center;font-size:18px;font-weight:bold;">
+
+            <?php echo esc_html($today_schedule['jummah1']); ?>
+
+            <?php if (!empty($today_schedule['jummah2'])) : ?>
+                • <?php echo esc_html($today_schedule['jummah2']); ?>
+            <?php endif; ?>
+
+            <?php if (!empty($today_schedule['jummah3'])) : ?>
+                • <?php echo esc_html($today_schedule['jummah3']); ?>
+            <?php endif; ?>
+
+        </p>
+
+    <?php endif; ?>
 
 </div>
 
