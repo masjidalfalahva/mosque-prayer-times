@@ -99,12 +99,6 @@ function mapt_dashboard_page() {
 	<?php
 }
 
-/**
- * Render the Import Schedule placeholder page.
- */
-function mapt_import_page() {
-	echo '<div class="wrap"><h1>Import Schedule</h1><p>Coming next...</p></div>';
-}
 
 /**
  * Render the Settings placeholder page.
