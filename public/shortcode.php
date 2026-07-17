@@ -56,6 +56,10 @@ function mapt_display_prayer_times() {
 
 <h2>Masjid Al-Falah Prayer Times</h2>
 
+<p style="text-align:center; font-size:18px; color:#003366; margin-top:-10px; margin-bottom:20px;">
+    <?php echo date_i18n('l, F j, Y'); ?>
+</p>
+    
 <table class="mapt-prayer-table">
 
 <tr>
