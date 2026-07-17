@@ -1,59 +1,83 @@
 <?php
 
 if ( ! defined( 'ABSPATH' ) ) {
-    exit;
+	exit;
 }
 
 /**
- * Create prayer times database table
+ * Create or update the plugin database tables.
  */
 function mapt_create_database() {
 
-    global $wpdb;
+	global $wpdb;
 
-    $table_name = $wpdb->prefix . 'masjid_prayer_times';
+	$prayer_table = $wpdb->prefix . 'masjid_prayer_times';
+	$jummah_table = $wpdb->prefix . 'masjid_jummah_schedules';
 
-    $charset_collate = $wpdb->get_charset_collate();
+	$charset_collate = $wpdb->get_charset_collate();
 
-    $sql = "CREATE TABLE $table_name (
+	/*
+	 * Daily prayer-times table.
+	 *
+	 * dbDelta() will preserve existing records while adding or updating
+	 * the table structure when necessary.
+	 */
+	$prayer_sql = "CREATE TABLE {$prayer_table} (
+		id mediumint(9) NOT NULL AUTO_INCREMENT,
+		created_at datetime DEFAULT CURRENT_TIMESTAMP,
+		updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-        id mediumint(9) NOT NULL AUTO_INCREMENT,
-        created_at datetime DEFAULT CURRENT_TIMESTAMP,
-        updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+		prayer_date date NOT NULL,
 
-        prayer_date date NOT NULL,
+		fajr_adhan varchar(20) DEFAULT '',
+		fajr_iqamah varchar(20) DEFAULT '',
 
-        fajr_adhan varchar(20),
-        fajr_iqamah varchar(20),
+		sunrise varchar(20) DEFAULT '',
 
-        sunrise varchar(20),
+		dhuhr_adhan varchar(20) DEFAULT '',
+		dhuhr_iqamah varchar(20) DEFAULT '',
 
-        dhuhr_adhan varchar(20),
-        dhuhr_iqamah varchar(20),
+		asr_adhan varchar(20) DEFAULT '',
+		asr_iqamah varchar(20) DEFAULT '',
 
-        asr_adhan varchar(20),
-        asr_iqamah varchar(20),
+		maghrib_adhan varchar(20) DEFAULT '',
+		maghrib_iqamah varchar(20) DEFAULT '',
 
-        maghrib_adhan varchar(20),
-        maghrib_iqamah varchar(20),
+		isha_adhan varchar(20) DEFAULT '',
+		isha_iqamah varchar(20) DEFAULT '',
 
-        isha_adhan varchar(20),
-        isha_iqamah varchar(20),
+		jummah1 varchar(20) DEFAULT '',
+		jummah2 varchar(20) DEFAULT '',
+		jummah3 varchar(20) DEFAULT '',
 
-        jummah1 varchar(20),
-        jummah2 varchar(20),
-        jummah3 varchar(20),
+		ramadan tinyint(1) DEFAULT 0,
 
-        ramadan tinyint(1) DEFAULT 0,
+		PRIMARY KEY  (id),
+		UNIQUE KEY prayer_date (prayer_date)
+	) {$charset_collate};";
 
-        PRIMARY KEY (id),
+	/*
+	 * Saved Jumu'ah date-range schedules.
+	 */
+	$jummah_sql = "CREATE TABLE {$jummah_table} (
+		id mediumint(9) NOT NULL AUTO_INCREMENT,
+		created_at datetime DEFAULT CURRENT_TIMESTAMP,
+		updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-        UNIQUE KEY prayer_date (prayer_date)
+		start_date date NOT NULL,
+		end_date date NOT NULL,
 
-    ) $charset_collate;";
+		jummah1 varchar(20) NOT NULL DEFAULT '',
+		jummah2 varchar(20) NOT NULL DEFAULT '',
+		jummah3 varchar(20) NOT NULL DEFAULT '',
 
-    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		PRIMARY KEY  (id),
+		KEY start_date (start_date),
+		KEY end_date (end_date)
+	) {$charset_collate};";
 
-    dbDelta($sql);
+	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
+	dbDelta( $prayer_sql );
+	dbDelta( $jummah_sql );
 }
