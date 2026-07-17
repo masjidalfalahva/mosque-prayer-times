@@ -66,16 +66,21 @@ function mapt_display_prayer_times() {
 
 
 <tr>
-<td>Fajr</td>
-<td><?php echo esc_html($today_schedule['fajr_adhan']); ?></td>
-<td><?php echo esc_html($today_schedule['fajr_iqamah']); ?></td>
+    <td>Fajr</td>
+    <td><?php echo esc_html($today_schedule['fajr_adhan']); ?></td>
+    <td><?php echo esc_html($today_schedule['fajr_iqamah']); ?></td>
 </tr>
 
+<tr>
+    <td>Sunrise</td>
+    <td><?php echo esc_html($today_schedule['sunrise']); ?></td>
+    <td>—</td>
+</tr>
 
 <tr>
-<td>Dhuhr</td>
-<td><?php echo esc_html($today_schedule['dhuhr_adhan']); ?></td>
-<td><?php echo esc_html($today_schedule['dhuhr_iqamah']); ?></td>
+    <td>Dhuhr</td>
+    <td><?php echo esc_html($today_schedule['dhuhr_adhan']); ?></td>
+    <td><?php echo esc_html($today_schedule['dhuhr_iqamah']); ?></td>
 </tr>
 
 
