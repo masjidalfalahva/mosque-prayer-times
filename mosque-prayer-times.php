@@ -30,6 +30,7 @@ require_once MAPT_PLUGIN_DIR . 'public/shortcode.php';
 require_once MAPT_PLUGIN_DIR . 'admin/admin-menu.php';
 require_once MAPT_PLUGIN_DIR . 'admin/add-prayer.php';
 require_once MAPT_PLUGIN_DIR . 'admin/manage-prayers.php';
+require_once MAPT_PLUGIN_DIR . 'admin/import-prayers.php';
 
 /**
  * Plugin activation
