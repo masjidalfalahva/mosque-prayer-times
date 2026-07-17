@@ -85,9 +85,6 @@ function mapt_dashboard_page() {
 	<?php
 }
 
-function mapt_add_prayer_page() {
-	echo '<div class="wrap"><h1>Add Prayer Times</h1><p>Coming next...</p></div>';
-}
 
 function mapt_import_page() {
 	echo '<div class="wrap"><h1>Import Schedule</h1><p>Coming next...</p></div>';
