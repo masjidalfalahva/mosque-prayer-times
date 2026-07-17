@@ -40,6 +40,39 @@ function mapt_render_add_prayer_page() {
 	);
 
 	$ramadan = 0;
+		/*
+	 * Load an existing record when using the Edit button.
+	 */
+	if (
+		isset( $_GET['mapt_edit_date'] ) &&
+		! isset( $_POST['mapt_save_prayer_times'] )
+	) {
+
+		$edit_date = sanitize_text_field(
+			wp_unslash( $_GET['mapt_edit_date'] )
+		);
+
+		$existing_record = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM {$table_name} WHERE prayer_date = %s",
+				$edit_date
+			)
+		);
+
+		if ( $existing_record ) {
+
+			$prayer_date = $existing_record->prayer_date;
+
+			foreach ( $fields as $field_name => $field_value ) {
+				if ( isset( $existing_record->$field_name ) ) {
+					$fields[ $field_name ] =
+						$existing_record->$field_name;
+				}
+			}
+
+			$ramadan = absint( $existing_record->ramadan );
+		}
+	}
 
 	/*
 	 * Process the form.
