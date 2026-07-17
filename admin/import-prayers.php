@@ -50,8 +50,24 @@ function mapt_import_page() {
 				if ( 'docx' !== $extension ) {
 					$error = 'Please upload a .docx Word document.';
 				} else {
-					$message = 'The Word document was received successfully. The table-reading code will be added in Step 2.';
-				}
+
+	require_once MAPT_PLUGIN_DIR . 'includes/docx-importer.php';
+
+	$rows = mapt_read_docx_table_rows( $file['tmp_name'] );
+
+	if ( is_wp_error( $rows ) ) {
+
+		$error = $rows->get_error_message();
+
+	} else {
+
+		$message = sprintf(
+			'Success! %d table rows were found in the Word document.',
+			count( $rows )
+		);
+
+	}
+}
 			}
 		}
 	}
