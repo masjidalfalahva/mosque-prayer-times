@@ -56,13 +56,13 @@ function mapt_register_admin_menu() {
 	);
 
 	add_submenu_page(
-		'mapt-dashboard',
-		'Jumu\'ah Schedule',
-		'Jumu\'ah Schedule',
-		'manage_options',
-		'mapt-jummah-schedule',
-		'mapt_render_jummah_schedule_page'
-	);
+    'mapt-dashboard',
+    'Jumu\'ah Schedule',
+    'Jumu\'ah Schedule',
+    'manage_options',
+    'mapt-jummah-schedule',
+    'mapt_render_jummah_schedule_manager_page'
+);
 
 	add_submenu_page(
 		'mapt-dashboard',
@@ -111,16 +111,7 @@ function mapt_dashboard_page() {
 /**
  * Render the Jumu'ah Schedule page.
  */
-function mapt_render_jummah_schedule_page() {
 
-	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_die(
-			esc_html__(
-				'You do not have permission to access this page.',
-				'masjid-prayer-times'
-			)
-		);
-	}
 
 	global $wpdb;
 
