@@ -28,6 +28,7 @@ require_once MAPT_PLUGIN_DIR . 'includes/database.php';
 require_once MAPT_PLUGIN_DIR . 'includes/prayer-loader.php';
 
 require_once MAPT_PLUGIN_DIR . 'public/shortcode.php';
+require_once MAPT_PLUGIN_DIR . 'public/tv-display.php';
 
 require_once MAPT_PLUGIN_DIR . 'admin/jummah-schedule.php';
 require_once MAPT_PLUGIN_DIR . 'admin/admin-menu.php';
