@@ -181,26 +181,62 @@ $tomorrow_schedule = null;
 
 </div>
 
-    <?php if ( date('N', strtotime($today_schedule['date'])) == 5 ) : ?>
+    <?php
 
+/*
+ * Find the next Friday schedule so Jumu'ah times
+ * can be displayed every day of the week.
+ */
+$jummah_schedule = null;
 
-        <h3 style="text-align:center;color:#C8A646;">JUMU'AH</h3>
+foreach ( $prayers as $schedule ) {
 
-        <p style="text-align:center;font-size:18px;font-weight:bold;">
+    if (
+        $schedule['date'] >= $today &&
+        date( 'N', strtotime( $schedule['date'] ) ) == 5 &&
+        ! empty( $schedule['jummah1'] )
+    ) {
+        $jummah_schedule = $schedule;
+        break;
+    }
+}
 
-            <?php echo esc_html($today_schedule['jummah1']); ?>
+?>
 
-            <?php if (!empty($today_schedule['jummah2'])) : ?>
-                • <?php echo esc_html($today_schedule['jummah2']); ?>
+<?php if ( ! empty( $jummah_schedule ) ) : ?>
+
+    <div style="margin-top:30px;">
+
+        <h3 style="text-align:center;color:#C8A646;">
+            JUMU'AH
+        </h3>
+
+        <p
+            style="
+                text-align:center;
+                font-size:18px;
+                font-weight:bold;
+                color:#003366;
+            "
+        >
+
+            <?php echo esc_html( $jummah_schedule['jummah1'] ); ?>
+
+            <?php if ( ! empty( $jummah_schedule['jummah2'] ) ) : ?>
+                &nbsp; • &nbsp;
+                <?php echo esc_html( $jummah_schedule['jummah2'] ); ?>
             <?php endif; ?>
 
-            <?php if (!empty($today_schedule['jummah3'])) : ?>
-                • <?php echo esc_html($today_schedule['jummah3']); ?>
+            <?php if ( ! empty( $jummah_schedule['jummah3'] ) ) : ?>
+                &nbsp; • &nbsp;
+                <?php echo esc_html( $jummah_schedule['jummah3'] ); ?>
             <?php endif; ?>
 
         </p>
 
-    <?php endif; ?>
+    </div>
+
+<?php endif; ?>
 
 </div>
 
